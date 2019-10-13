@@ -1,5 +1,5 @@
-# CPP Estimation and Control
-CPP Estimation and Control is a c++ library which implements estimation and control algorithms.
+# C++ Estimation and Control
+C++ Estimation and Control is a c++ library for estimation and control algorithms.
 
 ## Dependencies
 * make
