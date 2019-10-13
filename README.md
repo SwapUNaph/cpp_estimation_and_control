@@ -12,6 +12,6 @@ C++ Estimation and Control is a C++ library for estimation and control algorithm
 
 ## Example run instructions:
 * `./build/apps/program`
-* `python /files/plot_data.py`
+* `python files/plot_data.py`
 * This will plot a graph of an example system which estimates the distance based on acceleration input and noisy distance measurements
 ![alt text](https://github.com/SwapUNaph/cpp_estimation_and_control/blob/master/files/kalman_filter_plot.png)
