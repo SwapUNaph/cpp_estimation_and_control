@@ -7,7 +7,8 @@ BUILD	:= ./build
 OBJ_DIR  := $(BUILD)/objects
 APP_DIR  := $(BUILD)/apps
 TARGET	:= program
-INCLUDE  := -Iinclude/ -I/usr/include/Eigen
+INCLUDE  := -Iinclude/ 
+
 SRC	  :=					  \
    $(wildcard src/*.cpp)		 \
 	#$(wildcard src/module1/*.cpp) \

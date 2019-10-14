@@ -2,8 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <Eigen/Dense>
-#include "KalmanFilter.h"
-#include "LinearSystem.h"
+#include "KalmanFilter.hpp"
 
 using namespace Eigen;
 using namespace std;
@@ -28,12 +27,12 @@ int main(){
     R << 0.5;
     
     VectorXf X0(2);
-    X0 << 10.0, 0.0;
+    X0 << 5.0, 0.0;
     
-    LinearSystem LS(F,B,H,X0,0.01,0.5);
+    LinearSystem LS(F,B,H,X0,dt);
     ArrayXf t = ArrayXf::LinSpaced((int)(T/dt),0,T);
 
-    KalmanFilter KF(F,B,H,Q,R);
+    KalmanFilter KF(F,B,H,Q,R,X0,dt);
     ArrayXf U = t.sin();
 
     
@@ -44,12 +43,12 @@ int main(){
     for(int i=0; i < U.size(); i++){
         VectorXf u(1);
         u << U(i); 
-        LS.update(u);
+        LS.predict(u);
         VectorXf meas = LS.measure();
-        VectorXf actual = LS.getState();
-        KF.filter(meas,u);
-        VectorXf filtered = KF.getState();
-        outputFile << t(i) << ", " << U(i) << ", " << actual(0) << ", " << meas << ", " << filtered(0)<< "\n";
+        //VectorXf actual = LS.getX();
+        //KF.filter(meas,u);
+        //VectorXf filtered = KF.getX();
+        outputFile << t(i) << ", " << U(i) << ", " << LS.getX()(0) << ", " << meas << ", " << KF.filter(meas,u)(0)<< "\n";
     }
     
     outputFile.close();
