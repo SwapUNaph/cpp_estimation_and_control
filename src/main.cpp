@@ -9,14 +9,14 @@ using namespace Eigen;
 using namespace std;
 
 int main(){
-	float dt = 0.1;
+	float dt = 0.01;
 	float T = 10;
 	
     MatrixXf F(2,2);
-    F << 1,dt,0,1;
+    F << 0,1,0,0;
     
     MatrixXf B(2,1);
-    B << 0,dt;
+    B << 0.0,1.0;
     
     MatrixXf H(1,2);
     H << 1,0;
@@ -28,19 +28,22 @@ int main(){
     R << 0.5;
     
     VectorXf X0(2);
-    X0 << 5.0, 0.0;
+    X0 << 0.0, 0.0;
+    
+    VectorXf X0e(2);
+    X0e << 2.0, 1.0;
     
     VectorXf v_(2);
-    v_ << 0.01, 0.01;
+    v_ << 0.001, 0.001;
     
     VectorXf w_(1);
-    w_ << 0.1;
+    w_ << 0.5;
     
     StochasticLinearSystem SLS(F,B,H,X0,dt, v_, w_);
     ArrayXf t = ArrayXf::LinSpaced((int)(T/dt),0,T);
 
-    KalmanFilter KF(F,B,H,X0,dt,Q,R);
-    ArrayXf U = t.sin();
+    KalmanFilter KF(F,B,H,X0e,dt,Q,R);
+    ArrayXf U = 5 * (5 * t).sin(); // v = 5sin(5t)
 
     
     ofstream outputFile;

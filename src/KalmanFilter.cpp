@@ -44,7 +44,8 @@ VectorXf KalmanFilter::filter(VectorXf Z, VectorXf U){
 	predict(U);
 	
 	//Propagate covariance
-	P = F * P * F.transpose() + Q;
+	MatrixXf A = MatrixXf::Identity(F.rows(),F.cols()) + F * dt ;
+	P = A * P * A.transpose() + Q;
 	
 	//Kalman Gain
 	MatrixXf PHt = P * H.transpose();

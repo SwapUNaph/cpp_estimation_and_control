@@ -16,7 +16,7 @@ VectorXf LinearSystem::predict(VectorXf U){
   if( U.size() != B.cols() )
     throw "[Linear System::update] Invalid U dimensions!";
     
-  X = F * X + B * U;
+  X = ( MatrixXf::Identity(F.rows(),F.cols()) + F * dt) * X + (B * U) * dt;
   return X;
 }
 
