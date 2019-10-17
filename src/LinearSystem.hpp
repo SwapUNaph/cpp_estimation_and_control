@@ -42,25 +42,27 @@
 
 #pragma once
 #include <Eigen/Core>
-#include "System.cpp"
 
 using namespace Eigen;
 
-class LinearSystem : virtual public System{
+class LinearSystem {
 protected:
     MatrixXf F;
     MatrixXf B;
     MatrixXf H;
-    MatrixXf D;
+    VectorXf X;
+	float dt;
 public:
     LinearSystem(MatrixXf f, MatrixXf b, MatrixXf h, VectorXf X0,float dt);
-    LinearSystem(MatrixXf f, MatrixXf b, MatrixXf h, MatrixXf d, VectorXf X0, float dt);
     ~LinearSystem();
-    virtual VectorXf predict(VectorXf U); 
-    virtual VectorXf measure(VectorXf U);
-    virtual VectorXf measure(void);
+    VectorXf predict(VectorXf U); 
+    VectorXf measure(VectorXf U);
+    VectorXf measure(void);
+    void setX(VectorXf x);
+    void set_dt(float dt);
     void setF(MatrixXf f);
     void setB(MatrixXf b);
     void setH(MatrixXf h);
-    void setD(MatrixXf d);
+    VectorXf getX();
+    float get_dt();
 };

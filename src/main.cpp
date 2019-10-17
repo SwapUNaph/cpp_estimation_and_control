@@ -3,6 +3,7 @@
 #include <vector>
 #include <Eigen/Dense>
 #include "KalmanFilter.hpp"
+#include "StochasticLinearSystem.hpp"
 
 using namespace Eigen;
 using namespace std;
@@ -29,10 +30,16 @@ int main(){
     VectorXf X0(2);
     X0 << 5.0, 0.0;
     
-    LinearSystem LS(F,B,H,X0,dt);
+    VectorXf v_(2);
+    v_ << 0.01, 0.01;
+    
+    VectorXf w_(1);
+    w_ << 0.1;
+    
+    StochasticLinearSystem SLS(F,B,H,X0,dt, v_, w_);
     ArrayXf t = ArrayXf::LinSpaced((int)(T/dt),0,T);
 
-    KalmanFilter KF(F,B,H,Q,R,X0,dt);
+    KalmanFilter KF(F,B,H,X0,dt,Q,R);
     ArrayXf U = t.sin();
 
     
@@ -43,12 +50,9 @@ int main(){
     for(int i=0; i < U.size(); i++){
         VectorXf u(1);
         u << U(i); 
-        LS.predict(u);
-        VectorXf meas = LS.measure();
-        //VectorXf actual = LS.getX();
-        //KF.filter(meas,u);
-        //VectorXf filtered = KF.getX();
-        outputFile << t(i) << ", " << U(i) << ", " << LS.getX()(0) << ", " << meas << ", " << KF.filter(meas,u)(0)<< "\n";
+        SLS.predict(u);
+        VectorXf meas = SLS.measure();
+        outputFile << t(i) << ", " << U(i) << ", " << SLS.getX()(0) << ", " << meas << ", " << KF.filter(meas,u)(0)<< "\n";
     }
     
     outputFile.close();

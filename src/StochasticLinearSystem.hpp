@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  *   Copyright (c) 2019 Swapneel Naphade. All rights reserved.
@@ -33,31 +32,29 @@
  ****************************************************************************/
 
 /**
- * @file KalmanFilter.h
+ * @file StochasticLinearSystem.hpp
  * @version 1.0
  *
- * Definition of Kalman Filter.
+ * Definition of Stochastic Linear System.
  *
  * @author Swapneel Naphade <naphadeswapneel@gmail.com>
  */
- 
+
 #pragma once
-#include <Eigen/Dense>
+#include <Eigen/Core>
 #include "LinearSystem.hpp"
+
 using namespace Eigen;
 
-class KalmanFilter : public LinearSystem {
+class StochasticLinearSystem : public LinearSystem {
 protected:
-	MatrixXf Q;
-	MatrixXf R; 
-	MatrixXf P; 
-    MatrixXf K;
+    VectorXf v;
+    VectorXf w;
 public:
-    KalmanFilter(MatrixXf f, MatrixXf b, MatrixXf h, VectorXf x0, float dt_, MatrixXf q, MatrixXf r);
-    ~KalmanFilter();
-    VectorXf filter(VectorXf Z, VectorXf U);
-    MatrixXf getP(void);
-    MatrixXf getK(void);
-    void setQ(MatrixXf q);
-    void setR(MatrixXf r);
+    StochasticLinearSystem(MatrixXf f, MatrixXf b, MatrixXf h, VectorXf x0, float dt_, VectorXf v_, VectorXf w_);
+    ~StochasticLinearSystem();
+    VectorXf predict(VectorXf u);
+    VectorXf measure();
+    void set_v(VectorXf v_);
+    void set_w(VectorXf w_);
 };

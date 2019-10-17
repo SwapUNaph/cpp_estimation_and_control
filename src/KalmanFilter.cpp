@@ -33,23 +33,11 @@
 
 using namespace Eigen;
 
-KalmanFilter::KalmanFilter(MatrixXf f, MatrixXf b, MatrixXf h, VectorXf x0, float dt_, MatrixXf q, MatrixXf r) :  LinearSystem(f,b,h,x0,dt_), Q(q), R(r), P(q) {
-  K = MatrixXf::Zero(F.rows(), H.rows());
+KalmanFilter::KalmanFilter(MatrixXf f, MatrixXf b, MatrixXf h, VectorXf x0, float dt_, MatrixXf q, MatrixXf r) : LinearSystem(f,b,h,x0,dt_), Q(q), R(r), P(q) {
+  K = MatrixXf::Zero(f.rows(), h.rows());
 }
 
 KalmanFilter::~KalmanFilter(){}
-
-
-void KalmanFilter::update(VectorXf Z){
-	if( Z.size() != H.rows() )
-		throw "[Kalman Filter::update] Invalid Z dimensions!";
-
-	MatrixXf PHt = P * H.transpose();
-	MatrixXf S = H * PHt + R;
-	K = PHt * S.inverse();
-	X = X + K * (Z - H * X);
-	P = P - K * H * P;
-}
 
 VectorXf KalmanFilter::filter(VectorXf Z, VectorXf U){
 	//Predict
@@ -64,7 +52,7 @@ VectorXf KalmanFilter::filter(VectorXf Z, VectorXf U){
 	K = PHt * S.inverse();
 	
 	//Update estimate
-	X = X + K * (Z - measure(U) );
+	X = X + K * (Z - measure() );
 	
 	//Update covariance
 	P = P - K * H * P;

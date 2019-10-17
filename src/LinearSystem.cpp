@@ -3,25 +3,14 @@
 #include "LinearSystem.hpp"
 
 
-LinearSystem::LinearSystem(MatrixXf f, MatrixXf b, MatrixXf h, VectorXf X0, float dt_) : System(X0, dt_), F(f), B(b), H(h){
+LinearSystem::LinearSystem(MatrixXf f, MatrixXf b, MatrixXf h, VectorXf x0, float dt_) : F(f), B(b), H(h), X(x0), dt(dt_){
   //Check Matrix dimensions
-  if( F.rows() != F.cols() || F.rows() != B.rows() || F.rows() != H.cols() || F.rows() != X.size() )
+  if( f.rows() != f.cols() || f.rows() != b.rows() || f.rows() != h.cols() || f.rows() != x0.size() )
     throw "[Linear System] Matrix dimension mismatch.";
-   
-  D = MatrixXf::Zero(H.rows(), B.cols());
 }
 
-LinearSystem::LinearSystem(MatrixXf f, MatrixXf b, MatrixXf h, VectorXf X0, float dt_) : System(X0, dt_), F(f), B(b), H(h), D(d){
 
-  //Check Matrix dimensions
-  if( F.rows() != F.cols() || F.rows() != B.rows() || F.rows() != H.cols() ||
-  	  F.rows() != X.size() || D.rows() != H.rows() || D.cols() != B.cols() )
-    throw "[Linear System] Matrix dimension mismatch.";
-  
-}
-
-LinearSystem::~LinearSystem(){
-}
+LinearSystem::~LinearSystem(){}
 
 VectorXf LinearSystem::predict(VectorXf U){
   if( U.size() != B.cols() )
@@ -31,18 +20,27 @@ VectorXf LinearSystem::predict(VectorXf U){
   return X;
 }
 
-VectorXf LinearSystem::measure(VectorXf U){
-	if( U.size() != D.cols() )
-    	throw "[Linear System::measure] Invalid D dimensions!";
-    	
-    return (H * X + D * U);
-}
 
 VectorXf LinearSystem::measure(void){
     return (H * X);
 }
 
+void LinearSystem::setX(VectorXf x){
+	if( X.size() != x.size() )
+    	throw "[Linear System::setX] Invalid X dimensions!";
+	X = x;
+}
+void LinearSystem::set_dt(float dt_){
+	dt = abs(dt_);
+}
 
+VectorXf LinearSystem::getX(){
+	return X;
+}
+
+float LinearSystem::get_dt(){
+	return dt;
+}
 
 void LinearSystem::setF(MatrixXf f){
 	if( F.rows() != f.rows() || F.cols() != f.cols() )
@@ -61,11 +59,4 @@ void LinearSystem::setH(MatrixXf h){
     	throw "[Linear System::setH] Invalid H dimensions!";
 	H = h;
 }
-
-void LinearSystem::setD(MatrixXf d){
-	if( D.rows() != d.rows() || D.cols() != d.cols() )
-    	throw "[Linear System::setD] Invalid D dimensions!";
-	D = d;
-}
-
 
