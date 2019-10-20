@@ -23,6 +23,7 @@
 
 
 #pragma once
+#include <cmath>
 #include <Eigen/Core>
 
 using namespace Eigen;
@@ -33,6 +34,7 @@ protected:
     MatrixXf B;
     MatrixXf H;
     VectorXf X;
+    VectorXf X_dot;
 	float dt;
 public:
     LinearSystem(MatrixXf f, MatrixXf b, MatrixXf h, VectorXf X0,float dt);

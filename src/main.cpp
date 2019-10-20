@@ -80,7 +80,7 @@ int main(){
         u << U(i); 
         SLS.predict(u);
         VectorXf meas = SLS.measure();
-        outputFile << t(i) << ", " << U(i) << ", " << SLS.getX()(0) << ", " << meas << ", " << KF.filter(meas,u)(0)<< "\n";
+        outputFile << t(i) << ", " << U(i) << ", " << SLS.getX()(0) << ", " << meas << ", " << KF.estimate(meas,u)(0)<< "\n";
     }
     
     outputFile.close();

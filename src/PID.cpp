@@ -34,10 +34,11 @@
  * 
  * 
  */
-PID::PID(float p, float i, float d, float dt_) : P(p), I(i), D(d), dt(dt_){
+PID::PID(float p, float i, float d, float dt_) : P(p), I(i), D(d), dt(std::abs(dt_)){
 	integration = 0;
 	derivative = 0;
 	error = 0;
+	integration_limit = 5.0;
 }
 
 /**
@@ -46,7 +47,7 @@ PID::PID(float p, float i, float d, float dt_) : P(p), I(i), D(d), dt(dt_){
  * 
  * 
  */
-~PID::PID(){}
+PID::~PID(){}
 
 /**
  * @brief Updates the PID controller output given the error in measurement and
@@ -59,8 +60,8 @@ PID::PID(float p, float i, float d, float dt_) : P(p), I(i), D(d), dt(dt_){
 float PID::update(float err){
 	
 	integration += err * dt;
-	integration = (integration > abs(integration_limit)) ? abs(integration_limit) : integration;
-	integration = (integration < -abs(integration_limit)) ? -abs(integration_limit) : integration;
+	integration = (integration > std::abs(integration_limit)) ? std::abs(integration_limit) : integration;
+	integration = (integration < -std::abs(integration_limit)) ? -std::abs(integration_limit) : integration;
 	
 	derivative = (error - err) / dt;
 	error = err;
@@ -155,7 +156,7 @@ void PID::setD(float d){
  * 
  */
 void PID::set_dt(float dt_){
-	dt = abs(dt_);
+	dt = std::abs(dt_);
 }		
 
 /**

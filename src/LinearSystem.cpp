@@ -40,10 +40,11 @@
  * 
  * 
  */
-LinearSystem::LinearSystem(MatrixXf f, MatrixXf b, MatrixXf h, VectorXf x0, float dt_) : F(f), B(b), H(h), X(x0), dt(dt_){
+LinearSystem::LinearSystem(MatrixXf f, MatrixXf b, MatrixXf h, VectorXf x0, float dt_) : F(f), B(b), H(h), X(x0), dt(std::abs(dt_)){
   //Check Matrix dimensions
   if( f.rows() != f.cols() || f.rows() != b.rows() || f.rows() != h.cols() || f.rows() != x0.size() )
     throw "[Linear System] Matrix dimension mismatch.";
+  X_dot = VectorXf::Zero(X.size());
 }
 
 
@@ -68,8 +69,9 @@ LinearSystem::~LinearSystem(){}
 VectorXf LinearSystem::predict(VectorXf U){
   if( U.size() != B.cols() )
     throw "[Linear System::update] Invalid U dimensions!";
-    
-  X = ( MatrixXf::Identity(F.rows(),F.cols()) + F * dt) * X + (B * U) * dt;
+  VectorXf X_dot_current = F * X + B * U;
+  X = X + (X_dot + X_dot_current) / 2 * dt;
+  X_dot = X_dot_current;
   return X;
 }
 

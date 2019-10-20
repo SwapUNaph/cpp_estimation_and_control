@@ -22,6 +22,7 @@
  */
 
 #pragma once
+#include <cmath>
 
 class PID{ 
 private:
@@ -32,9 +33,10 @@ private:
 	float error;
 	float integration;
 	float derivative;
-	float integration_limit = 5.0;
+	float integration_limit;
 public: 
 	PID(float p, float i, float d, float dt_);
+	~PID();
 	float update(float err);
 	void reset();
 	float getP();

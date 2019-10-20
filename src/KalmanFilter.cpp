@@ -61,14 +61,14 @@ KalmanFilter::~KalmanFilter(){}
 
 
 /**
- * @brief Filter the measurement based on control input
+ * @brief Estimate the state based on control input
  * @param Z Measurement
  * @param U Control Input
- * @returns Filtered measurement
+ * @returns Estimated state vector
  * 
  * 
  */
-VectorXf KalmanFilter::filter(VectorXf Z, VectorXf U){
+VectorXf KalmanFilter::estimate(VectorXf Z, VectorXf U){
 	//Predict
 	predict(U);
 	
@@ -82,7 +82,7 @@ VectorXf KalmanFilter::filter(VectorXf Z, VectorXf U){
 	K = PHt * S.inverse();
 	
 	//Update estimate
-	X = X + K * (Z - measure() );
+	X = X + K * ( Z - measure() );
 	
 	//Update covariance
 	P = P - K * H * P;

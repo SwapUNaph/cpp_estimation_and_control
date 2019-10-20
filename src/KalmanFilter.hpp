@@ -36,7 +36,7 @@ protected:
 public:
     KalmanFilter(MatrixXf f, MatrixXf b, MatrixXf h, VectorXf x0, float dt_, MatrixXf q, MatrixXf r);
     ~KalmanFilter();
-    VectorXf filter(VectorXf Z, VectorXf U);
+    VectorXf estimate(VectorXf Z, VectorXf U);
     MatrixXf getP(void);
     MatrixXf getK(void);
     void setQ(MatrixXf q);

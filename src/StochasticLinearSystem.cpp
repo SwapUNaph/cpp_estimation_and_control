@@ -71,8 +71,9 @@ StochasticLinearSystem::~StochasticLinearSystem(){}
 VectorXf StochasticLinearSystem::predict(VectorXf U){
   if( U.size() != B.cols() )
     throw "[Linear System::update] Invalid U dimensions!";
-    
-  X = ( MatrixXf::Identity(F.rows(),F.cols()) + F * dt) * X + (B * U) * dt + v.cwiseProduct(VectorXf::Random(X.size()));
+  VectorXf X_dot_current = F * X + B * U;
+  X = X + (X_dot + X_dot_current) / 2 * dt + v.cwiseProduct(VectorXf::Random(X.size()));
+  X_dot = X_dot_current; 
   return X;
 }
 
