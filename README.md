@@ -4,6 +4,9 @@ C++ Estimation and Control is a C++ library for estimation and control algorithm
 ## Dependencies
 * make
 * Eigen
+# Python dependencies for plotting
+* numpy
+* matplotlib
 
 ## Build instructions _[For Linux and Mac]_:
 Follow the steps to download and build the repository
