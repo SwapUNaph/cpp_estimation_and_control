@@ -65,7 +65,7 @@ int main(){
     StochasticLinearSystem SLS(F,B,H,X0,dt, v_, w_);
     ArrayXf t = ArrayXf::LinSpaced((int)(T/dt),0,T);
     //  | x |  =  | 1  dt | | x |  +  | 0 | a   +  noise                             
-	//  | v |     | 0  1  | | v |     | dt| 
+    //  | v |     | 0  1  | | v |     | dt| 
 	                     
     KalmanFilter KF(F,B,H,X0e,dt,Q,R);
     ArrayXf U = 5 * (5 * t).sin(); // a = 5sin(5t)
